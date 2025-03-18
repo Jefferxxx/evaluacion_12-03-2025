@@ -1,3 +1,4 @@
+
 import solicitud from "./solicitud.js";
 const URL = "https://jsonplaceholder.typicode.com";// esta variable URL es la base de datos que se utiliza para realizar las solicitudes y obtener los datos 
 

@@ -15,3 +15,4 @@ const solicitud = async url => {
 
 // Exporta la función solicitud para que pueda ser utilizada en otros módulos
 export default solicitud
+

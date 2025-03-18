@@ -8,8 +8,6 @@ export { getAlbums } from "./albums.js";
 export { getPhotos } from "./photos.js";
 
 
-import { listarTareasPendientes } from "./listarTareasPendientes.js";
-import { buscarUsuarioYAlbums } from "./buscarUsuarioYAlbums.js";
-import { filtrarPostsPorTitulo } from "./filtrarPostsPorTitulo.js";
-
-export { listarTareasPendientes, buscarUsuarioYAlbums, filtrarPostsPorTitulo };
+export { listarTareasPendientes } from "./listarTareasPendientes.js";
+export { buscarUsuarioYAlbums } from "./buscarUsuarioYAlbums.js";
+export { filtrarPostsPorTitulo } from "./filtrarPostsPorTitulo.js";
