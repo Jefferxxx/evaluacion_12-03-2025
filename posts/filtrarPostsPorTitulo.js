@@ -1,8 +1,7 @@
 
-import solicitud from "./solicitud.js";
-const URL = "https://jsonplaceholder.typicode.com";// esta variable URL es la base de datos que se utiliza para realizar las solicitudes y obtener los datos 
+import solicitud from "../Modulos/helpers/solicitud.js";
 
-export const filtrarPostsPorTitulo = async (titulo) => {// esta funcion es asincrona que se encarga de filtrar los posts por titulo y obtener sus comentarios
+export const filtrarPostPorTitulo = async (titulo) => {// esta funcion es asincrona que se encarga de filtrar los posts por titulo y obtener sus comentarios
   try {
     const response = await solicitud(`${URL}/posts`);// use const response = await fetch(`${URL}/posts`); para obtener todos los posts de la API y guardarlos en la variable response
     const posts = await response.json();// usamos json para que nos devuelva un objeto que contenga los posts
@@ -18,6 +17,6 @@ export const filtrarPostsPorTitulo = async (titulo) => {// esta funcion es asinc
     
     console.log("Post encontrado:", postFiltrado);// se imprime en la consola el post encontrado con sus comentarios 
   } catch (error) {// este catch es para manejar los errores y
-    console.error("Error al filtrar posts:", error);// se imprime en la consola el error ya que se utiliza await para que se espere a que se cumpla la promesa de listarTareasPendientes y asi se imprime en la consola
+    console.error("Error al filtrar posts:" + error);// se imprime en la consola el error ya que se utiliza await para que se espere a que se cumpla la promesa de listarTareasPendientes y asi se imprime en la consola
   }
 };

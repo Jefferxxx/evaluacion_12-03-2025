@@ -1,95 +1,135 @@
-import { 
-  getUsuarios,
-  getPost,
-  getCommets,
-  getAlbums,
-  getPhotos,
-  listarTareasPendientes,
-  buscarUsuarioYAlbums,
-  filtrarPostsPorTitulo 
-} from "./Modulos/index.js";
+import {URL} from './Modulos/helpers/index.js';
+import { getUsuarios, getUsuariosYnombres } from './Modulos/usuarios/index.js';
+import { getPost, filtrarPostsPorTitulo, getPostsporUsuario_Id, } from './Modulos/posts/index.js';
+import { getCommets } from './Modulos/comments/index.js';
+import { getAlbums } from './Modulos/album/index.js';
+import { getTareasPorUsuarioId } from './Modulos/fotos/index.js';
+import { getPhotos } from './Modulos/fotos/index.js';
 
-const URL = "https://jsonplaceholder.typicode.com";
-
-async function manejardatos() {
-  try {
-    const usuarios = await getUsuarios(URL);
-    return await Promise.all(
-      usuarios.map(async (usuario) => {
-        const posts = await getPost(URL, usuario);
-        const comentPost = await Promise.all(
-          posts.map(async (post) => {
-            const coments = await getCommets(URL, post);
-            return { ...post, coments };
-          })
-        );
-
-        const albums = await getAlbums(URL, usuario);
-        const photoAlbum = await Promise.all(
-          albums.map(async (album) => {
-            const photos = await getPhotos(URL, album);
-            return { ...album, photos };
-          })
-        );
-
-        return { ...usuario, photoAlbum, comentPost };
-      })
-    );
-  } catch (error) {
-    console.error("Error al manejar datos:", error);
-  }
-}
-
-manejardatos().then((data) => {
-  console.log("Datos cargados exitosamente.");
-});
-
-const OPCIONES = {
-  LISTAR_TAREAS: "1",
-  BUSCAR_USUARIO: "2",
-  FILTRAR_POSTS: "3",
-  SALIR: "4"
+const solicitarParametro = (indicador) => {
+    let respuesta;
+    let regexParametro = /\D/i;
+    do {
+        respuesta = prompt(`Ingrese el ${indicador}:`);
+    } while (!respuesta || !regexParametro.test(respuesta));
+    return respuesta;
 };
 
-function mostrarMenu() {
-  console.log("\nSeleccione una opción:");
-  console.log("1. Listar todas las tareas pendientes por usuario");
-  console.log("2. Buscar usuario y listar sus álbumes y fotos");
-  console.log("3. Filtrar posts por título e incluir comentarios");
-  console.log("4. Salir\n");
+const listarTareasPendientes = async () => {
+    const usuarios = await getUsuarios(URL);
+    return await Promise.all(
+        usuarios.map(async (usuario) => {
+            const tareasPendientes = await getTareasPorUsuarioId (URL, usuario.id, false);
+            return { ...usuario, tareasPendientes };
+        })
+    );
+};
+
+const usuariosPorUsername = async () => {
+    let username = solicitarParametro("username");
+    const usuarios = await getUsuariosYnombres(URL, username);
+    return await Promise.all(
+        usuarios.map(async (usuario) => {
+            const albums = await getAlbums(URL, usuario.id);
+            const albumsConFotos = await Promise.all(
+                albums.map(async (album) => {
+                    const fotos = await getPhotos(URL, album.id);
+                    return { ...album, fotos };
+                })
+            );
+            return { ...usuario, albumsConFotos };
+        })
+    );
+};
+
+const postPorTitulo = async () => {
+    let titulo = solicitarParametro("título del post");
+    const posts = await filtrarPostsPorTitulo(URL, titulo);
+    return await Promise.all(
+        posts.map(async (post) => {
+            const comentarios = await getCommets(URL, post.id);
+            return { ...post, comentarios };
+        })
+    );
+};
+
+const DataUser = async () => {
+    const usuarios = await getUsuarios(URL);
+    return await Promise.all(
+        usuarios.map(async (usuario) => {
+            const posts = await getPostsporUsuario_Id(URL, usuario.id);
+            const postsConComentarios = await Promise.all(
+                posts.map(async (post) => {
+                    const comentarios = await getCommets(URL, post.id);
+                    return { ...post, comentarios };
+                })
+            );
+            const albums = await getAlbums(URL, usuario.id);
+            const albumsConFotos = await Promise.all(
+                albums.map(async (album) => {
+                    const fotos = await getPhotos(URL, album.id);
+                    return { ...album, fotos };
+                })
+            );
+            return { ...usuario, postsConComentarios, albumsConFotos };
+        })
+    );
+};
+
+const telefono_usuario = async () => {
+  const usuarios = await getUsuarios(URL);
+
+  return await Promise.all(
+    usuarios.map(async usuario => {
+      return { 
+          nombre: usuario.name, 
+          telefono: usuario.phone 
+      };
+    })
+  );
+
 }
 
-async function leerEntrada(mensaje) {
-  const respuesta = prompt(mensaje);
-  return respuesta ? respuesta.trim() : "";
-}
+const OPCIONES = {
+    LISTAR_TAREAS: 1,
+    BUSCAR_USUARIO: 2,
+    FILTRAR_POSTS: 3,
+    telefono_usuario: 4,
+    TODOS_DATOS: 5,
+    SALIR: 0
+};
 
-async function main() {
-  while (true) {
-    mostrarMenu();
-    const opcion = await leerEntrada("Ingrese el número de la opción: ");
+while (true) {
+    let opcion;
+    do {
+        opcion = parseInt(prompt("Seleccione una opción:\n1. Listar tareas pendientes\n2. Buscar usuario y sus álbumes\n3. Filtrar posts por título\n4. Obtener todos los datos\n0. Salir")) ?? "";
+    } while (Number.isNaN(opcion) || !Object.values(OPCIONES).includes(opcion));
 
-    switch (opcion) {
-      case OPCIONES.LISTAR_TAREAS:
-        await listarTareasPendientes();
+    if (opcion === OPCIONES.SALIR) {
+        alert("Programa finalizado con éxito.");
         break;
-      case OPCIONES.BUSCAR_USUARIO:
-        const nombre = await leerEntrada("Ingrese el nombre de usuario: ");
-        if (nombre) await buscarUsuarioYAlbums(nombre);
-        else console.log("Debe ingresar un nombre de usuario válido.");
-        break;
-      case OPCIONES.FILTRAR_POSTS:
-        const titulo = await leerEntrada("Ingrese el título del post a filtrar: ");
-        if (titulo) await filtrarPostsPorTitulo(titulo);
-        else console.log("Debe ingresar un título válido.");
-        break;
-      case OPCIONES.SALIR:
-        console.log("Saliendo...");
-        return;
-      default:
-        console.log("Opción inválida. Intente de nuevo.");
+    } else {
+        console.log(`Opción ${opcion} seleccionada:`);
+        switch (opcion) {
+            case OPCIONES.LISTAR_TAREAS:
+                await listarTareasPendientes().then(data => console.log(data));
+                break;
+
+            case OPCIONES.BUSCAR_USUARIO:
+                await usuariosPorUsername().then(data => data.length !== 0 ? console.log(data) : console.log("No hay información relacionada"));
+                break;
+
+            case OPCIONES.FILTRAR_POSTS:
+                await postPorTitulo().then(data => data.length !== 0 ? console.log(data) : console.log("No hay información relacionada"));
+                break;
+
+                case OPCIONES.telefono_usuario:
+                await telefono_usuario().then(data => data.length !== 0 ? console.log(data) : console.log("No hay información relacionada"));
+                break;
+            
+            case OPCIONES.TODOS_DATOS:
+                await DataUser().then(data => console.log(data));
+                break;
+        }
     }
-  }
 }
-
-main();

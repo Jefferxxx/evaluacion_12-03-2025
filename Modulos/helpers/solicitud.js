@@ -1,4 +1,4 @@
-const solicitud = async url => {
+export const solicitud = async url => {
   
   // Realiza una solicitud a la URL especificada en 'url' usando la función 'fetch'.
   // La función 'await' espera a que la promesa 'fetch' se resuelva antes de continuar.
@@ -12,7 +12,3 @@ const solicitud = async url => {
   //que sea un objeto
   return data//retorna data que es el objeto con los valoers
 }
-
-// Exporta la función solicitud para que pueda ser utilizada en otros módulos
-export default solicitud
-

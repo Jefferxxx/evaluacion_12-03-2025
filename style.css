@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Kanit", sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    background-color: #ec4e0f;
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.container {
+    margin-top: 20px;
+    width: 90%;
+    max-width: 700px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.evaluation-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.instruction {
+    background: #ede7f6;
+    padding: 12px;
+    border-left: 5px solid #ec4e0f;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.api-link {
+    display: block;
+    margin-top: 5px;
+    color: #ec4e0f;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.api-link:hover {
+    text-decoration: underline;
+}
+
+.title {
+    font-size: 22px;
+    color: #333;
+    margin-top: 10px;
+}
+
+.exercise-list {
+    list-style: none;
+    padding-left: 10px;
+}
+
+.exercise-list li {
+    padding: 8px 0;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
