@@ -1,5 +1,5 @@
 // importa la funcion solicitud que se encarga de realizar una solicitud a una url
-import {solicitud} from "../Modulos/solicitudes/index.js";
+import {solicitud} from "../solicitudes/index.js";
 
 // exporta la funcion getUsuariosYnombres que se encarga de obtener los usuarios de la api
 // recibe como parametro la url de la api y el username del usuario que se quiere buscar

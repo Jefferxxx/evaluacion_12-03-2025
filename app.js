@@ -3,10 +3,10 @@
 // Se extraen las funciones requeridas de cada módulo para usarlas en este script
 import { URL } from './Modulos/solicitudes/index.js';
 import { getUsuarios, getUsuariosYnombres } from './Modulos/usuarios/index.js';
-import { getPost, filtrarPostsPorTitulo, getPostsporUsuario_Id } from './Modulos/posts/index.js';
+import { getPost, filtrarPostPorTitulo, getPostsporUsuario_Id } from './Modulos/posts/index.js';
 import { getCommets } from './Modulos/comments/index.js';
 import { getAlbums } from './Modulos/album/index.js';
-import { getTareasPorUsuarioId } from './Modulos/fotos/index.js';
+import { getTareasPorUsuarioId } from './Modulos/tareas/index.js';
 import { getPhotos } from './Modulos/fotos/index.js';
 
 // Función para solicitar un parámetro al usuario y validarlo antes de devolverlo
@@ -51,7 +51,7 @@ const usuariosPorUsername = async () => {
 // Función asincrónica para buscar posts por título e incluir sus comentarios
 const postPorTitulo = async () => {
     let titulo = solicitarParametro("título del post"); // Solicita un título al usuario
-    const posts = await filtrarPostsPorTitulo(URL, titulo); // Obtiene los posts que coincidan con el título ingresado
+    const posts = await filtrarPostPorTitulo(URL, titulo); // Obtiene los posts que coincidan con el título ingresado
     return await Promise.all(
         posts.map(async (post) => {
             const comentarios = await getCommets(URL, post.id); // Obtiene los comentarios de cada post encontrado
@@ -111,7 +111,7 @@ const OPCIONES = {
 while (true) {
     let opcion;
     do {
-        opcion = parseInt(prompt("Seleccione una opción:\n1. Listar tareas pendientes\n2. Buscar usuario y sus álbumes\n3. Filtrar posts por título\n4. Obtener todos los datos\n0. Salir")) ?? ""; // Solicita al usuario que seleccione una opción válida
+        opcion = parseInt(prompt("Seleccione una opción:\n1. Listar tareas pendientes\n2. Buscar usuario y sus álbumes\n3. Filtrar posts por título\n4. Obtener el nombre y teléfono de cada usuario\n5. Obtener todos los datos\n0. Salir")) ?? ""; // Solicita al usuario que seleccione una opción válida
     } while (Number.isNaN(opcion) || !Object.values(OPCIONES).includes(opcion)); // Se repite hasta que la entrada sea un número válido
 
     if (opcion === OPCIONES.SALIR) {
@@ -123,15 +123,19 @@ while (true) {
             case OPCIONES.LISTAR_TAREAS:
                 await listarTareasPendientes().then(data => console.log(data)); // Llama a la función para listar tareas pendientes
                 break;
+
             case OPCIONES.BUSCAR_USUARIO:
                 await usuariosPorUsername().then(data => data.length !== 0 ? console.log(data) : console.log("No hay información relacionada"));
                 break;
+
             case OPCIONES.FILTRAR_POSTS:
                 await postPorTitulo().then(data => data.length !== 0 ? console.log(data) : console.log("No hay información relacionada"));
                 break;
+
             case OPCIONES.telefono_usuario:
                 await telefono_usuario().then(data => data.length !== 0 ? console.log(data) : console.log("No hay información relacionada"));
                 break;
+
             case OPCIONES.TODOS_DATOS:
                 await DataUser().then(data => console.log(data));
                 break;

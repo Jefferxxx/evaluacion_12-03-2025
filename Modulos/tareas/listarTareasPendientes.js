@@ -1,4 +1,4 @@
-import { solicitud } from "../Modulos/solicitudes/index.js"; // Importa la función 'solicitud' del módulo de solicitudes
+import { solicitud } from "../solicitudes/index.js"; // Importa la función 'solicitud' del módulo de solicitudes
 
 export const getTareasPorUsuarioId = async (url, userId, status) => { // Declara y exporta una función asincrónica que obtiene tareas por ID de usuario y estado
 
