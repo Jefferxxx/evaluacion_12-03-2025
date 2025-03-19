@@ -1,5 +1,5 @@
 
-import solicitud from "../Modulos/helpers/solicitud.js";
+import {solicitud} from "../solicitudes/solicitud.js";
 
 export const filtrarPostPorTitulo = async (titulo) => {// esta funcion es asincrona que se encarga de filtrar los posts por titulo y obtener sus comentarios
   try {

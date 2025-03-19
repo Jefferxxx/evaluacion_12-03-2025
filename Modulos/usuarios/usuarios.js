@@ -1,4 +1,4 @@
-import solicitud from "../modulos/helpers/solicitud.js";//importa el modulo solicitud para ver los usuarios
+import {solicitud} from "../Modulos/helpers/solicitud.js";//importa el modulo solicitud para ver los usuarios
 export  const getUsuarios=async(URL,id)=>{//exporta todo de una vez y no necesita usar expoert luego
     let ruta="";
     if (id) {// se usa el if para ver si se ingresa un id o no lo cual esto es una sentencia
